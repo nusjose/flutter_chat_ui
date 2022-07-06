@@ -459,8 +459,7 @@ class _ChatState extends State<Chat> {
     } else {
       final map = object as Map<String, Object>;
       final message = map['message']! as types.Message;
-      final messageWidth = double.infinity;
-
+      final messageWidth = (constraints.maxWidth * 1).floor();
 
       return Message(
         key: ValueKey(message.id),
