@@ -80,7 +80,6 @@ class Chat extends StatefulWidget {
     this.usePreviewData = true,
     required this.user,
     this.userAgent,
-    this.isSystemMessage = false,
   });
 
   /// See [Message.avatarBuilder].
@@ -259,7 +258,6 @@ class Chat extends StatefulWidget {
   })? textMessageBuilder;
 
 
-  bool isSystemMessage;
   /// Chat theme. Extend [ChatTheme] class to create your own theme or use
   /// existing one, like the [DefaultChatTheme]. You can customize only certain
   /// properties, see more here [DefaultChatTheme].
@@ -352,7 +350,7 @@ class _ChatState extends State<Chat> {
                                       ChatList(
                                     isLastPage: widget.isLastPage,
                                     itemBuilder: (item, index) =>
-                                        _messageBuilder(item, constraints, widget.isSystemMessage),
+                                        _messageBuilder(item, constraints),
                                     items: _chatMessages,
                                     onEndReached: widget.onEndReached,
                                     onEndReachedThreshold:
@@ -440,7 +438,7 @@ class _ChatState extends State<Chat> {
         ),
       );
 
-  Widget _messageBuilder(Object object, BoxConstraints constraints, bool isSystemMessage) {
+  Widget _messageBuilder(Object object, BoxConstraints constraints) {
     if (object is DateHeader) {
       if (widget.dateHeaderBuilder != null) {
         return widget.dateHeaderBuilder!(object);
@@ -461,11 +459,8 @@ class _ChatState extends State<Chat> {
     } else {
       final map = object as Map<String, Object>;
       final message = map['message']! as types.Message;
-      final messageWidth = isSystemMessage
-      ? double.infinity
-      : widget.showUserAvatars && message.author.id != widget.user.id
-              ? min(constraints.maxWidth * 0.72, 440).floor()
-              : min(constraints.maxWidth * 0.78, 440).floor();
+      final messageWidth = double.infinity;
+
 
       return Message(
         key: ValueKey(message.id),
